@@ -17,13 +17,21 @@ class ChatClient(name: String) extends Actor {
   mediator ! Subscribe(topic, self)
   println(s"$name joined chat room")
 
+  var count = 1
   def receive = {
     case ChatClient.Publish(msg) =>
+      count += 1
+//      println(s"${name} publish (${count})")
       mediator ! Publish(topic, ChatClient.Message(name, msg))
 
     case ChatClient.Message(from, text) =>
+      count += 1
       val direction = if (sender == self) ">>>>" else s"<< $from:"
-      println(s"$name $direction $text")
+
+      if((count % 1000) == 0)
+//        println(s"${name} $direction (${count}) $text")
+        println(s"${name} (${count})")
+
   }
 
 }

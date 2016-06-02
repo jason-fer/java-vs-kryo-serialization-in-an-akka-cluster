@@ -7,13 +7,21 @@ import com.typesafe.config.{Config, ConfigFactory}
 object Main {
   def main(args: Array[String]): Unit = {
 
-    val kryoConfig: Config = KryoSerializerConfig.akkaActorSerializationConfig
+    val kryoConfig: List[Config] = List(KryoSerializerConfig.akkaActorSerializationConfig)
     val origConfig = ConfigFactory.load()
-    val overrideConfigs: List[Config] = kryoConfig :: List().flatten
 
-    val config: Config = overrideConfigs.
+    val config: Config = kryoConfig.
       reduce(_.withFallback(_)).
       withFallback(origConfig)
+
+    println("xxxxxxxxxxxx")
+    println("xxxxxxxxxxxx")
+    println("xxxxxxxxxxxx")
+    println(config)
+
+    System.exit(1)
+
+//    val config = ConfigFactory.load()
 
     val systemName = "ChatApp"
     val system1 = ActorSystem(systemName, config)
@@ -23,12 +31,12 @@ object Main {
     system1.actorOf(Props[RandomUser], "Ben")
     system1.actorOf(Props[RandomUser], "Kathy")
 
-    Thread.sleep(500)
+    Thread.sleep(10)
     val system2 = ActorSystem(systemName, config)
     Cluster(system2).join(joinAddress)
     system2.actorOf(Props[RandomUser], "Skye")
 
-    Thread.sleep(500)
+    Thread.sleep(10)
     val system3 = ActorSystem(systemName, config)
     Cluster(system3).join(joinAddress)
     system3.actorOf(Props[RandomUser], "Miguel")

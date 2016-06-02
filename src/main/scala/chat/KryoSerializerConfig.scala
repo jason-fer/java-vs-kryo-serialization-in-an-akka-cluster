@@ -7,13 +7,18 @@ import scala.collection.JavaConverters._
 object KryoSerializerConfig {
   val serializationClasses: Map[String, List[Class[_]]] = Map(
     "akkaKryo" -> List(
-      classOf[ChatClient],
-      classOf[MemberListener],
-      classOf[RandomUser],
-      ChatClient.getClass,
-      Main.getClass,
+      classOf[java.lang.String],
+      classOf[java.lang.Boolean],
+      classOf[chat.ChatClient],
+      scala.concurrent.duration.FiniteDuration.getClass,
+      chat.Main.getClass,
+      chat.KryoSerializerConfig.getClass,
+      chat.ChatClient.getClass,
       chat.RandomUser.getClass,
-      KryoSerializerConfig.getClass
+      chat.RandomUser.Tick.getClass,
+      chat.RandomUser.Tock.getClass,
+      chat.ChatClient.Publish.getClass,
+      chat.ChatClient.Message.getClass
     ))
 
   val akkaActorSerializationConfig: Config = {

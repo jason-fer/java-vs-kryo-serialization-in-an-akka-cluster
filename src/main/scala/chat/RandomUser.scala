@@ -7,6 +7,7 @@ import akka.actor.ActorRef
 import akka.actor.Props
 
 object RandomUser {
+  case object Tock
   case object Tick
   val phrases = Vector(
     "Creativity is allowing yourself to make mistakes. Art is knowing which ones to keep.",
@@ -43,17 +44,33 @@ class RandomUser extends Actor {
   def scheduler = context.system.scheduler
   def rnd = ThreadLocalRandom.current
 
+  var shouldStop = false
+
   override def preStart(): Unit =
-    scheduler.scheduleOnce(5.seconds, self, Tick)
+    scheduler.scheduleOnce(10.milliseconds, self, Tick)
+    scheduler.scheduleOnce(10.seconds, self, Tock)
 
   // override postRestart so we don't call preStart and schedule a new Tick
   override def postRestart(reason: Throwable): Unit = ()
 
+  var count = 1
+
   def receive = {
     case Tick =>
-      scheduler.scheduleOnce(rnd.nextInt(5, 100).milliseconds, self, Tick)
-      val msg = phrases(rnd.nextInt(phrases.size))
-      client ! ChatClient.Publish(msg)
+//      scheduler.scheduleOnce(rnd.nextInt(5, 10).milliseconds, self, Tick)
+      if(! shouldStop){
+        scheduler.scheduleOnce(0.milliseconds, self, Tick)
+        val msg = phrases(rnd.nextInt(phrases.size))
+        count += 1
+        client ! ChatClient.Publish(msg)
+      }
+
+    case Tock => {
+      println("xxxxxxxxxxxxxxxxxxxxxxxx ----------------------------------------- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+      println(s"xxxxxxxxxxxxxxxxxxxxxxxx !!!!!!!!!    ${self.path.name} should stop     !!!!!!!!!!!! xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+      println("xxxxxxxxxxxxxxxxxxxxxxxx ----------------------------------------- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+      shouldStop = true
+    }
   }
 
 }
