@@ -1,0 +1,3 @@
+[warn] Unrecognized repository inter-project, ignoring it
+[info] Updating default:java-serialization_2.11:1.0 (sbt classifiers)
+[info] Resolved default:java-serialization_2.11:1.0 dependencies
