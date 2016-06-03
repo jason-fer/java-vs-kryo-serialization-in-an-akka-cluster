@@ -5,6 +5,8 @@ import akka.cluster.Cluster
 import com.typesafe.config.{Config, ConfigFactory}
 
 object Main {
+
+  val blah: Any = "xxx"
   def main(args: Array[String]): Unit = {
 
     val kryoConfig: List[Config] = List(KryoSerializerConfig.akkaActorSerializationConfig)
@@ -14,17 +16,19 @@ object Main {
       reduce(_.withFallback(_)).
       withFallback(origConfig)
 
-    println("xxxxxxxxxxxx")
-    println("xxxxxxxxxxxx")
-    println("xxxxxxxxxxxx")
-    println(config)
-
-    System.exit(1)
-
 //    val config = ConfigFactory.load()
+//    println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+//    println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+//    println(config)
+//    println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+//    println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+
 
     val systemName = "ChatApp"
     val system1 = ActorSystem(systemName, config)
+
+    println(system1.logConfiguration())
+
     val joinAddress = Cluster(system1).selfAddress
     Cluster(system1).join(joinAddress)
     system1.actorOf(Props[MemberListener], "memberListener")
@@ -41,5 +45,8 @@ object Main {
     Cluster(system3).join(joinAddress)
     system3.actorOf(Props[RandomUser], "Miguel")
     system3.actorOf(Props[RandomUser], "Tyler")
+
+    Thread.sleep(1000)
+    System.exit(1)
   }
 }

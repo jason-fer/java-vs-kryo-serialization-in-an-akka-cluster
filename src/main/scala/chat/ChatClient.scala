@@ -7,8 +7,8 @@ import akka.cluster.pubsub.DistributedPubSubMediator.{Publish, Subscribe}
 object ChatClient {
   def props(name: String): Props = Props(classOf[ChatClient], name)
 
-  case class Publish(msg: String)
-  case class Message(from: String, text: String)
+  case class Publish(msg: String) extends Serializable
+  case class Message(from: String, text: String) extends Serializable
 }
 
 class ChatClient(name: String) extends Actor {
