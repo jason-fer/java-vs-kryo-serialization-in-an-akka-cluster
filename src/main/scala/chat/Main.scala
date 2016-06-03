@@ -32,19 +32,19 @@ object Main {
     val joinAddress = Cluster(system1).selfAddress
     Cluster(system1).join(joinAddress)
     system1.actorOf(Props[MemberListener], "memberListener")
-    system1.actorOf(Props[RandomUser], "Ben")
-    system1.actorOf(Props[RandomUser], "Kathy")
+    system1.actorOf(Props[RandomUser], "Darth")
+    system1.actorOf(Props[RandomUser], "Vader")
 
     Thread.sleep(10)
     val system2 = ActorSystem(systemName, config)
     Cluster(system2).join(joinAddress)
-    system2.actorOf(Props[RandomUser], "Skye")
+    system2.actorOf(Props[RandomUser], "Yoda")
 
     Thread.sleep(10)
     val system3 = ActorSystem(systemName, config)
     Cluster(system3).join(joinAddress)
-    system3.actorOf(Props[RandomUser], "Miguel")
-    system3.actorOf(Props[RandomUser], "Tyler")
+    system3.actorOf(Props[RandomUser], "Luke")
+    system3.actorOf(Props[RandomUser], "Skywalker")
 
 
     Thread.sleep(10)
