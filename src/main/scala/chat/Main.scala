@@ -27,7 +27,7 @@ object Main {
     val systemName = "ChatApp"
     val system1 = ActorSystem(systemName, config)
 
-    println(system1.logConfiguration())
+//    println(system1.logConfiguration())
 
     val joinAddress = Cluster(system1).selfAddress
     Cluster(system1).join(joinAddress)
@@ -46,7 +46,21 @@ object Main {
     system3.actorOf(Props[RandomUser], "Miguel")
     system3.actorOf(Props[RandomUser], "Tyler")
 
-    Thread.sleep(1000)
-    System.exit(1)
+
+    Thread.sleep(10)
+    val system4 = ActorSystem(systemName, config)
+    Cluster(system4).join(joinAddress)
+    system4.actorOf(Props[RandomUser], "Han")
+    system4.actorOf(Props[RandomUser], "Solo")
+
+
+    Thread.sleep(10)
+    val system5 = ActorSystem(systemName, config)
+    Cluster(system5).join(joinAddress)
+    system5.actorOf(Props[RandomUser], "Chuck")
+    system5.actorOf(Props[RandomUser], "Norris")
+
+//    Thread.sleep(1000)
+//    System.exit(1)
   }
 }
